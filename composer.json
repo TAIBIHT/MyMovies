@@ -10,6 +10,8 @@
 
         "symfony/twig-bridge": "2.7.*",
 
+        "symfony/security": "2.7.*",
+
         "symfony/config": "2.7.*",
 
         "symfony/form": "2.7.*",
@@ -21,7 +23,7 @@
     "autoload": {
 
         "psr-4": {
-            "MyMovies\\": "src"
+            "MicroCMS\\": "src"
         }
 
     }
