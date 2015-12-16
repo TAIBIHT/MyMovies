@@ -13,7 +13,7 @@ class CommentDAO extends DAO
  public function save(Comment $comment) {
         $commentData = array(
             'Cat_id' => $comment->getArticle()->getId(),
-            'usr_id' => $comment->getAuthor()->getId(),
+            
             'com_content' => $comment->getContent()
             );
 
@@ -41,23 +41,7 @@ class CommentDAO extends DAO
 
      * @var \MyMovies\DAO\UserDAO
 
-     */
-
-    private $userDAO;
-
-
-    public function setArticleDAO(ArticleDAO $articleDAO) {
-
-        $this->articleDAO = $articleDAO;
-
-    }
-
-
-    public function setUserDAO(UserDAO $userDAO) {
-
-        $this->userDAO = $userDAO;
-
-    }
+    
 
 
     /**
@@ -146,18 +130,7 @@ class CommentDAO extends DAO
 
         }
 
-        if (array_key_exists('usr_id', $row)) {
-
-            // Find and set the associated author
-
-            $userId = $row['usr_id'];
-
-            $user = $this->userDAO->find($userId);
-
-            $comment->setAuthor($user);
-
-        }
-
+    
         
 
         return $comment;

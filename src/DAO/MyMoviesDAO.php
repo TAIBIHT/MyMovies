@@ -38,7 +38,7 @@ class MyMoviesDAO extends DAO
 
     public function findAll() {
 
-        $sql = "select * from movie order by art_id desc";
+        $sql = "select * from movie order by Cat_id desc";
 
         $result = $this->getDb()->fetchAll($sql);
 
