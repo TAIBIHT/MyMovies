@@ -1,7 +1,7 @@
 <?php
 
 
-namespace MicroCMS\DAO;
+namespace MyMovies\DAO;
 
 
 use Doctrine\DBAL\Connection;

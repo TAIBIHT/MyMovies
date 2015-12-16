@@ -26,9 +26,6 @@ $app->register(new Silex\Provider\TranslationServiceProvider());
 $app['dao.MyMovies'] = $app->share(function ($app) {
     return new MyMovies\DAO\MyMoviesDAO($app['db']);
 });
-$app['dao.user'] = $app->share(function ($app) {
-    return new MyMovies\DAO\UserDAO($app['db']);
-});
 $app['dao.comment'] = $app->share(function ($app) {
     $commentDAO = new MyMovies\DAO\CommentDAO($app['db']);
     $commentDAO->setMyMoviesDAO($app['dao.MyMovies']);

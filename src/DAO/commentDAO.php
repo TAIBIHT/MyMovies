@@ -1,10 +1,10 @@
 <?php
 
 
-namespace MicroCMS\DAO;
+namespace MyMovies\DAO;
 
 
-use MicroCMS\Domain\Comment;
+use MyMovies\Domain\Comment;
 
 
 class CommentDAO extends DAO 
@@ -12,7 +12,7 @@ class CommentDAO extends DAO
 {
  public function save(Comment $comment) {
         $commentData = array(
-            'art_id' => $comment->getArticle()->getId(),
+            'Cat_id' => $comment->getArticle()->getId(),
             'usr_id' => $comment->getAuthor()->getId(),
             'com_content' => $comment->getContent()
             );
@@ -30,7 +30,7 @@ class CommentDAO extends DAO
  }
     /**
 
-     * @var \MicroCMS\DAO\ArticleDAO
+     * @var \MyMovies\DAO\ArticleDAO
 
      */
 
@@ -39,7 +39,7 @@ class CommentDAO extends DAO
 
     /**
 
-     * @var \MicroCMS\DAO\UserDAO
+     * @var \MyMovies\DAO\UserDAO
 
      */
 
@@ -81,11 +81,11 @@ class CommentDAO extends DAO
         $article = $this->articleDAO->find($articleId);
 
 
-        // art_id is not selected by the SQL query
+        // Cat_id is not selected by the SQL query
 
         // The article won't be retrieved during domain objet construction
 
-        $sql = "select com_id, com_content, usr_id from t_comment where art_id=? order by com_id";
+        $sql = "select com_id, com_content, usr_id from t_comment where Cat_id=? order by com_id";
 
         $result = $this->getDb()->fetchAll($sql, array($articleId));
 
@@ -121,7 +121,7 @@ class CommentDAO extends DAO
 
      * @param array $row The DB row containing Comment data.
 
-     * @return \MicroCMS\Domain\Comment
+     * @return \MyMovies\Domain\Comment
 
      */
 
@@ -134,11 +134,11 @@ class CommentDAO extends DAO
         $comment->setContent($row['com_content']);
 
 
-        if (array_key_exists('art_id', $row)) {
+        if (array_key_exists('Cat_id', $row)) {
 
             // Find and set the associated article
 
-            $articleId = $row['art_id'];
+            $articleId = $row['Cat_id'];
 
             $article = $this->articleDAO->find($articleId);
 
