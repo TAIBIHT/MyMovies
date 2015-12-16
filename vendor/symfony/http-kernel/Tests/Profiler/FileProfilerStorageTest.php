@@ -16,13 +16,13 @@ use Symfony\Component\HttpKernel\Profiler\Profile;
 
 class FileProfilerStorageTest extends AbstractProfilerStorageTest
 {
-    private $tmpDir;
-    private $storage;
+    protected static $tmpDir;
+    protected static $storage;
 
-    protected function cleanDir()
+    protected static function cleanDir()
     {
         $flags = \FilesystemIterator::SKIP_DOTS;
-        $iterator = new \RecursiveDirectoryIterator($this->tmpDir, $flags);
+        $iterator = new \RecursiveDirectoryIterator(self::$tmpDir, $flags);
         $iterator = new \RecursiveIteratorIterator($iterator, \RecursiveIteratorIterator::SELF_FIRST);
 
         foreach ($iterator as $file) {
@@ -32,19 +32,23 @@ class FileProfilerStorageTest extends AbstractProfilerStorageTest
         }
     }
 
-    protected function setUp()
+    public static function setUpBeforeClass()
     {
-        $this->tmpDir = sys_get_temp_dir().'/sf2_profiler_file_storage';
-        if (is_dir($this->tmpDir)) {
+        self::$tmpDir = sys_get_temp_dir().'/sf2_profiler_file_storage';
+        if (is_dir(self::$tmpDir)) {
             self::cleanDir();
         }
-        $this->storage = new FileProfilerStorage('file:'.$this->tmpDir);
-        $this->storage->purge();
+        self::$storage = new FileProfilerStorage('file:'.self::$tmpDir);
     }
 
-    protected function tearDown()
+    public static function tearDownAfterClass()
     {
         self::cleanDir();
+    }
+
+    protected function setUp()
+    {
+        self::$storage->purge();
     }
 
     /**
@@ -52,7 +56,7 @@ class FileProfilerStorageTest extends AbstractProfilerStorageTest
      */
     protected function getStorage()
     {
-        return $this->storage;
+        return self::$storage;
     }
 
     public function testMultiRowIndexFile()
@@ -69,7 +73,7 @@ class FileProfilerStorageTest extends AbstractProfilerStorageTest
             $storage->write($profile);
         }
 
-        $handle = fopen($this->tmpDir.'/index.csv', 'r');
+        $handle = fopen(self::$tmpDir.'/index.csv', 'r');
         for ($i = 0; $i < $iteration; ++$i) {
             $row = fgetcsv($handle);
             $this->assertEquals('token'.$i, $row[0]);
@@ -81,7 +85,7 @@ class FileProfilerStorageTest extends AbstractProfilerStorageTest
 
     public function testReadLineFromFile()
     {
-        $r = new \ReflectionMethod($this->storage, 'readLineFromFile');
+        $r = new \ReflectionMethod(self::$storage, 'readLineFromFile');
 
         $r->setAccessible(true);
 
@@ -90,7 +94,7 @@ class FileProfilerStorageTest extends AbstractProfilerStorageTest
         fwrite($h, "line1\n\n\nline2\n");
         fseek($h, 0, SEEK_END);
 
-        $this->assertEquals('line2', $r->invoke($this->storage, $h));
-        $this->assertEquals('line1', $r->invoke($this->storage, $h));
+        $this->assertEquals('line2', $r->invoke(self::$storage, $h));
+        $this->assertEquals('line1', $r->invoke(self::$storage, $h));
     }
 }

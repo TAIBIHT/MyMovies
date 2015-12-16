@@ -14,9 +14,6 @@ namespace Symfony\Component\HttpKernel\Tests\Profiler;
 use Symfony\Component\HttpKernel\Profiler\RedisProfilerStorage;
 use Symfony\Component\HttpKernel\Tests\Profiler\Mock\RedisMock;
 
-/**
- * @group legacy
- */
 class RedisProfilerStorageTest extends AbstractProfilerStorageTest
 {
     protected static $storage;

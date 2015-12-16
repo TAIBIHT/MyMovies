@@ -17,6 +17,14 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+class DummyMongoDbProfilerStorage extends MongoDbProfilerStorage
+{
+    public function getMongo()
+    {
+        return parent::getMongo();
+    }
+}
+
 class MongoDbProfilerStorageTestDataCollector extends DataCollector
 {
     public function setData($data)
@@ -40,12 +48,29 @@ class MongoDbProfilerStorageTestDataCollector extends DataCollector
 }
 
 /**
- * @group legacy
  * @requires extension mongo
  */
 class MongoDbProfilerStorageTest extends AbstractProfilerStorageTest
 {
-    private $storage;
+    protected static $storage;
+
+    public static function setUpBeforeClass()
+    {
+        self::$storage = new DummyMongoDbProfilerStorage('mongodb://localhost/symfony_tests/profiler_data', '', '', 86400);
+        try {
+            self::$storage->getMongo();
+        } catch (\MongoConnectionException $e) {
+            self::$storage = null;
+        }
+    }
+
+    public static function tearDownAfterClass()
+    {
+        if (self::$storage) {
+            self::$storage->purge();
+            self::$storage = null;
+        }
+    }
 
     public function getDsns()
     {
@@ -81,12 +106,12 @@ class MongoDbProfilerStorageTest extends AbstractProfilerStorageTest
             $profile = new Profile('time_'.$i);
             $profile->setTime($dt->getTimestamp());
             $profile->setMethod('GET');
-            $this->storage->write($profile);
+            self::$storage->write($profile);
         }
-        $records = $this->storage->find('', '', 3, 'GET');
+        $records = self::$storage->find('', '', 3, 'GET');
         $this->assertCount(1, $records, '->find() returns only one record');
         $this->assertEquals($records[0]['token'], 'time_2', '->find() returns the latest added record');
-        $this->storage->purge();
+        self::$storage->purge();
     }
 
     /**
@@ -94,10 +119,10 @@ class MongoDbProfilerStorageTest extends AbstractProfilerStorageTest
      */
     public function testDsnParser($dsn, $expected)
     {
-        $m = new \ReflectionMethod($this->storage, 'parseDsn');
+        $m = new \ReflectionMethod(self::$storage, 'parseDsn');
         $m->setAccessible(true);
 
-        $this->assertEquals($expected, $m->invoke($this->storage, $dsn));
+        $this->assertEquals($expected, $m->invoke(self::$storage, $dsn));
     }
 
     public function testUtf8()
@@ -105,16 +130,16 @@ class MongoDbProfilerStorageTest extends AbstractProfilerStorageTest
         $profile = new Profile('utf8_test_profile');
 
         $data = 'HЁʃʃϿ, ϢorЃd!';
-        $nonUtf8Data = iconv('UTF-8', 'UCS-2', $data);
+        $nonUtf8Data = mb_convert_encoding($data, 'UCS-2');
 
         $collector = new MongoDbProfilerStorageTestDataCollector();
         $collector->setData($nonUtf8Data);
 
         $profile->setCollectors(array($collector));
 
-        $this->storage->write($profile);
+        self::$storage->write($profile);
 
-        $readProfile = $this->storage->read('utf8_test_profile');
+        $readProfile = self::$storage->read('utf8_test_profile');
         $collectors = $readProfile->getCollectors();
 
         $this->assertCount(1, $collectors);
@@ -127,25 +152,15 @@ class MongoDbProfilerStorageTest extends AbstractProfilerStorageTest
      */
     protected function getStorage()
     {
-        return $this->storage;
+        return self::$storage;
     }
 
     protected function setUp()
     {
-        $this->storage = new MongoDbProfilerStorage('mongodb://localhost/symfony_tests/profiler_data', '', '', 86400);
-        $m = new \ReflectionMethod($this->storage, 'getMongo');
-        $m->setAccessible(true);
-        try {
-            $m->invoke($this->storage);
-        } catch (\MongoConnectionException $e) {
+        if (self::$storage) {
+            self::$storage->purge();
+        } else {
             $this->markTestSkipped('A MongoDB server on localhost is required.');
         }
-
-        $this->storage->purge();
-    }
-
-    protected function tearDown()
-    {
-        $this->storage->purge();
     }
 }

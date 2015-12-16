@@ -14,9 +14,6 @@ namespace Symfony\Component\HttpKernel\Tests\Profiler;
 use Symfony\Component\HttpKernel\Profiler\MemcachedProfilerStorage;
 use Symfony\Component\HttpKernel\Tests\Profiler\Mock\MemcachedMock;
 
-/**
- * @group legacy
- */
 class MemcachedProfilerStorageTest extends AbstractProfilerStorageTest
 {
     protected static $storage;
