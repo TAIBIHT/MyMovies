@@ -1,63 +1,13 @@
-insert into t_article values
+insert into category values
+(1, "Biopic");
+insert into category values
+(2, "Comédie");
+insert into category values
+(3, "Dessin animé");
 
-(1, 'First article', 'Hi there! This is the very first article.');
-
-insert into t_article values
-
-(2, 'Lorem ipsum', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut hendrerit mauris ac porttitor accumsan. Nunc vitae pulvinar odio, auctor interdum dolor. Aenean sodales dui quis metus iaculis, hendrerit vulputate lorem vestibulum. Suspendisse pulvinar, purus at euismod semper, nulla orci pulvinar massa, ac placerat nisi urna eu tellus. Fusce dapibus rutrum diam et dictum. Sed tellus ipsum, ullamcorper at consectetur vitae, gravida vel sem. Vestibulum pellentesque tortor et elit posuere vulputate. Sed et volutpat nunc. Praesent nec accumsan nisi, in hendrerit nibh. In ipsum mi, fermentum et eleifend eget, eleifend vitae libero. Phasellus in magna tempor diam consequat posuere eu eget urna. Fusce varius nulla dolor, vel semper dui accumsan vitae. Sed eget risus neque.');
-
-insert into t_article values
-
-(3, 'Lorem ipsum in french', "J’en dis autant de ceux qui, par mollesse d’esprit, c’est-à-dire par la crainte de la peine et de la douleur, manquent aux devoirs de la vie. Et il est très facile de rendre raison de ce que j’avance. Car, lorsque nous sommes tout à fait libres, et que rien ne nous empêche de faire ce qui peut nous donner le plus de plaisir, nous pouvons nous livrer entièrement à la volupté et chasser toute sorte de douleur ; mais, dans les temps destinés aux devoirs de la société ou à la nécessité des affaires, souvent il faut faire divorce avec la volupté, et ne se point refuser à la peine. La règle que suit en cela un homme sage, c’est de renoncer à de légères voluptés pour en avoir de plus grandes, et de savoir supporter des douleurs légères pour en éviter de plus fâcheuses.");
-
-drop table if exists t_comment;
-
-drop table if exists t_article;
-
-
-create table t_article (
-
-    art_id integer not null primary key auto_increment,
-
-    art_title varchar(100) not null,
-
-    art_content varchar(2000) not null
-
-) engine=innodb character set utf8 collate utf8_unicode_ci;
-
-
-create table t_comment (
-
-    com_id integer not null primary key auto_increment,
-
-    com_author varchar(100) not null,
-
-    com_content varchar(500) not null,
-
-    art_id integer not null,
-
-    constraint fk_com_art foreign key(art_id) references t_article(art_id)
-
-) engine=innodb character set utf8 collate utf8_unicode_ci;
-
-insert into t_comment values
-
-(1, 'John Doe', 'Great! Keep up the good work.', 1);
-
-insert into t_comment values
-
-(2, 'Ann Yone', "Thank you, I'll try my best.", 1);
-
-insert into t_article values
-(1, 'First article', 'Hi there! This is the very first article.');
-insert into t_article values
-(2, 'Lorem ipsum', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut hendrerit mauris ac porttitor accumsan. Nunc vitae pulvinar odio, auctor interdum dolor. Aenean sodales dui quis metus iaculis, hendrerit vulputate lorem vestibulum. Suspendisse pulvinar, purus at euismod semper, nulla orci pulvinar massa, ac placerat nisi urna eu tellus. Fusce dapibus rutrum diam et dictum. Sed tellus ipsum, ullamcorper at consectetur vitae, gravida vel sem. Vestibulum pellentesque tortor et elit posuere vulputate. Sed et volutpat nunc. Praesent nec accumsan nisi, in hendrerit nibh. In ipsum mi, fermentum et eleifend eget, eleifend vitae libero. Phasellus in magna tempor diam consequat posuere eu eget urna. Fusce varius nulla dolor, vel semper dui accumsan vitae. Sed eget risus neque.');
-insert into t_article values
-(3, 'Lorem ipsum in french', "J’en dis autant de ceux qui, par mollesse d’esprit, c’est-à-dire par la crainte de la peine et de la douleur, manquent aux devoirs de la vie. Et il est très facile de rendre raison de ce que j’avance. Car, lorsque nous sommes tout à fait libres, et que rien ne nous empêche de faire ce qui peut nous donner le plus de plaisir, nous pouvons nous livrer entièrement à la volupté et chasser toute sorte de douleur ; mais, dans les temps destinés aux devoirs de la société ou à la nécessité des affaires, souvent il faut faire divorce avec la volupté, et ne se point refuser à la peine. La règle que suit en cela un homme sage, c’est de renoncer à de légères voluptés pour en avoir de plus grandes, et de savoir supporter des douleurs légères pour en éviter de plus fâcheuses.");
-
-
-
-insert into t_comment values
-(1, 'Great! Keep up the good work.', 1, 1);
-insert into t_comment values
-(2, "Thank you, I'll try my best.", 1, 2);
+insert into movie values
+(1, "Le Loup de Wall Street", "Le Loup de Wall Street (The Wolf of Wall Street) est un film américain réalisé par Martin Scorsese sorti en 2013. Adaptation de l'autobiographie éponyme de Jordan Belfort, il s'agit du plus gros succès commercial de Martin Scorsese.", "Le Loup de Wall Street (The Wolf of Wall Street) est un film américain réalisé par Martin Scorsese sorti en 2013. Inspiré d'une histoire réelle, il raconte l'ascension d'un courtier en bourse, Jordan Belfort interprété par Leonardo DiCaprio, vers la gloire, la fortune et les malversations au cœur des années 1980, le menant à la chute et à une forme de rédemption. Adaptation de l'autobiographie éponyme de Jordan Belfort, il s'agit du plus gros succès commercial de Martin Scorsese.", "Martin Scorsese", 2013, "loup.jpg", 1);
+insert into movie values
+(2, "Vice-Versa", "Vice-versa ou Sens dessus dessous au Québec (Inside Out) est le 133e long-métrage d'animation des studios Disney et le 15e long-métrage de Pixar. Réalisé en images de synthèse par Pete Docter et Ronnie del Carmen, il est sorti en 2015.", "Vice-versa ou Sens dessus dessous au Québec (Inside Out) est le 133e long-métrage d'animation des studios Disney et le 15e long-métrage de Pixar. Réalisé en images de synthèse par Pete Docter et Ronnie del Carmen, il est sorti en 2015.", "Pete Docter", 2015, "vice-versa.jpg", 3);
+insert into movie values
+(3, "Babysitting", "Babysitting est un film français réalisé par Philippe Lacheau et Nicolas Benamou, sorti en 2014. Il s'agit du premier film interprété par une grande partie de La Bande à Fifi, troupe révélée par Canal+. C'est le premier film français à allier prises de vues traditionnelles et found footage, à l'image de Projet X.", "Babysitting est un film français réalisé par Philippe Lacheau et Nicolas Benamou, sorti en 2014. Il s'agit du premier film interprété par une grande partie de La Bande à Fifi, troupe révélée par Canal+. C'est le premier film français à allier prises de vues traditionnelles et found footage, à l'image de Projet X.", "Philippe Lacheau et Nicolas Benamou", 2013, "babysitting.jpg", 2);
